@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <table>
+        <tbody>
+            {% for user in data %}
+                <tr>
+                    <td>
+                        <a href="{%   url 'accounts:user_detail' user.id %}">{{ user.user.username }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

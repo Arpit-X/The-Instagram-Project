@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <p> username : {{ user.username }}</p>
+        <p>{{ user.first_name }}</p>
+        <p>email : {{ user.email    }}</p>
+        <p>followers : {{ followers }}</p>
+        <p>following : {{ following }}</p>
+        <p>Posts : {{ posts.count }}</p>
+        <a href="{% url 'accounts:follow_toggle' user.id %}">
+            {% if isFollowing %}
+                <button class="btn btn-link">Following</button>
+            {% else %}
+                <button class="btn btn-primary">Follow</button>
+            {% endif %}
+       </a>
+{% endblock %}

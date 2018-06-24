@@ -1,13 +1,56 @@
+from django.db.models import Q
 from django.shortcuts import render
 from .forms import *
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DetailView
 from django.shortcuts import render, redirect
 from .forms import *
-from .models import  Follow
+from .models import *
+from posts.models import *
 # Create your views here.
 
+
+class UserListView(ListView):
+    model = UserProfile
+    context_object_name = 'data'
+    template_name = 'accounts/users_list.html'
+    def get_queryset(self):
+        return UserProfile.objects.filter(~Q(user=self.request.user))
+
+
+class UserDetailView(DetailView):
+    model = UserProfile
+    def get_context_data(self, **kwargs):
+
+        context = super(UserDetailView,self).get_context_data(**kwargs)
+        profile = UserProfile.objects.get(pk=self.kwargs['pk'])
+        user = profile.user
+        followers = Follow.objects.filter(following=user).count()
+        following = Follow.objects.filter(follower=user).count()
+        isFollowing = Follow.objects.filter(follower=self.request.user,following=user ).count()
+        posts = Posts.objects.filter(uploader=user)
+        context.update({
+            'followers': followers,
+            'following': following,
+            'user': user,
+            'isFollowing': isFollowing,
+            'posts':posts
+        })
+        return context
+
+
+class FollowToggle(View):
+
+    def get(self,*args,**kwargs):
+        follower = self.request.user
+        following = User.objects.get(id=self.kwargs.get('id'))
+        following_obj = Follow.objects.filter(following=following,follower=follower)
+        if following_obj.count():
+            following_obj.delete()
+        else:
+            Follow.objects.create(follower=follower,following=following)
+        return redirect(self.request.META.get('HTTP_REFERER'))
 
 class LoginFormView(View):
 
@@ -33,6 +76,7 @@ class LoginFormView(View):
                 return redirect('accounts:login_form')
             else:
                 return redirect('accounts:SignUpform')
+
 
 class SignUpFormView(View):
 
@@ -70,12 +114,13 @@ class SignUpFormView(View):
                 }
             )
 
+
 def view_profile(request):
     user = request.user
     followers = Follow.objects.filter(following=user).count()
     following = Follow.objects.filter(follower=user).count()
     args = {
-        'user':user,
+        'user': user,
         'followers': followers,
         'following': following
         }
