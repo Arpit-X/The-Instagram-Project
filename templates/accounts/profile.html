@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container">
+        <p> username : {{ user.username }}</p>
+        <p>{{ user.first_name }}</p>
+        <p>email : {{ user.email    }}</p>
+        <p>followers : {{ followers }}</p>
+        <p>following : {{ following }}</p>
+    </div>
+{% endblock %}

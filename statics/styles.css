@@ -1,0 +1,12 @@
+form{
+  position:fixed;
+    top: 45%;
+    left: 45%;
+    width: 40em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+    padding: 5em;
+    border-radius: 10px;
+}
