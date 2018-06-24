@@ -119,9 +119,11 @@ def view_profile(request):
     user = request.user
     followers = Follow.objects.filter(following=user).count()
     following = Follow.objects.filter(follower=user).count()
+    posts = Posts.objects.filter(uploader=user)
     args = {
         'user': user,
         'followers': followers,
-        'following': following
+        'following': following,
+        'posts': posts
         }
     return render(request,'accounts/profile.html',args)

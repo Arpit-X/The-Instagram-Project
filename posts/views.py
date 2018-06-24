@@ -12,8 +12,6 @@ class AddPost(CreateView):
 
     def post(self, request, *args, **kwargs):
         post = PostForm(request.POST,request.FILES)
-        import ipdb
-        ipdb.set_trace()
         if post.is_valid():
             post = post.save(commit=False)
             post.uploader = request.user
