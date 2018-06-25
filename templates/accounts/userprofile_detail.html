@@ -14,4 +14,12 @@
                 <button class="btn btn-primary">Follow</button>
             {% endif %}
        </a>
+        <div class="container-fluid">
+            {% for post in posts %}
+                <div style="display: inline-block;padding: 10px;">
+                    <img src="{{ post.image.url }}" width="300px">
+                </div>
+            {% endfor %}
+        </div>
+
 {% endblock %}

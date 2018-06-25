@@ -65,6 +65,7 @@ class LoginFormView(View):
         )
 
     def post(self, request, *args, **kwargs):
+
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -73,9 +74,9 @@ class LoginFormView(View):
             if user is not None:
 
                 login(request,user)
-                return redirect('accounts:login_form')
+                return redirect('accounts:view_profile')
             else:
-                return redirect('accounts:SignUpform')
+                return redirect('accounts:Signup_form')
 
 
 class SignUpFormView(View):
@@ -127,3 +128,9 @@ def view_profile(request):
         'posts': posts
         }
     return render(request,'accounts/profile.html',args)
+
+
+class LogOut(View):
+    def get(self, request):
+        logout(request)
+        return redirect('accounts:login_form')

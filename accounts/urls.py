@@ -5,6 +5,7 @@ from django.contrib.auth.views import password_reset, password_reset_done, passw
 app_name = "accounts"
 urlpatterns = [
     path('login/', LoginFormView.as_view(), name="login_form"),
+    path('logout/',LogOut.as_view(),name='logout'),
     path('signup/', SignUpFormView.as_view(), name="Signup_form"),
     path('profile/', view_profile, name="view_profile"),
     path('users/', UserListView.as_view(), name="user_list"),
