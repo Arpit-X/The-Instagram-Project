@@ -74,7 +74,7 @@ class LoginFormView(View):
             if user is not None:
 
                 login(request,user)
-                return redirect('accounts:view_profile')
+                return redirect('posts:news_feed')
             else:
                 return redirect('accounts:Signup_form')
 
@@ -92,7 +92,8 @@ class SignUpFormView(View):
         )
 
     def post(self, request, *args, **kwargs):
-
+        # import ipdb
+        # ipdb.set_trace()
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()

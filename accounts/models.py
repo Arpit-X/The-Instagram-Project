@@ -18,7 +18,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-def create_profile(sender ,**kwargs):
+def create_profile(sender, **kwargs):
     if kwargs['created']:
         user_profile = UserProfile.objects.create(user=kwargs['instance'])
 

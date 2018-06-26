@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <center>
+        {% for feed in feeds %}
+            <div class="feed">
+                <img src="{{ feed.image.url }}" width="400px"/>
+                <p>{{ feed.status }}</p>
+            </div>
+        {% endfor %}
+    </center>
+{% endblock %}
