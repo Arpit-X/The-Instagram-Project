@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'instagramproject',
         'HOST': 'localhost',
-        'USER':"root",
+        'USER': "root",
         'PASSWORD': "root"
     }
 }

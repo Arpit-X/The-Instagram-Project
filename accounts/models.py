@@ -11,7 +11,6 @@ class UserProfile(models.Model):
     status = models.TextField(max_length=100, default=" ")
     city = models.CharField(max_length=30, default="")
     phone = PhoneNumberField()
-    email = models.EmailField(unique=True)
     display_picture = models.ImageField(default="default_dp.png", blank=True, upload_to="user_display_pictures")
 
     def __str__(self):
@@ -20,8 +19,7 @@ class UserProfile(models.Model):
 
 def create_profile(sender, **kwargs):
     if kwargs['created']:
-        user_profile = UserProfile.objects.create(user=kwargs['instance'])
-
+         user_profile = UserProfile.objects.create(user=kwargs['instance'])
 
 post_save.connect(create_profile, sender=User)
 
