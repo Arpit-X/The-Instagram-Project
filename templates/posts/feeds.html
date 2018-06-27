@@ -5,16 +5,18 @@
     <script>
         var likedClass = "glyphicon-heart";
         var unlikedClass = "glyphicon-heart-empty";
-        $(document).ready(function(){
 
+        $(document).ready(function(){
             var liked_posts = [];
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState === 4 && this.status === 200) {
                   var jason = JSON.parse(this.responseText);
+
                   jason.forEach(function(item){
                       var temp = Object.values(item);
                       liked_posts.push(temp[0]);
+
                   });
                   var like_buttons = $('.likes').toArray();
                   like_buttons.forEach(function (value) {
@@ -24,6 +26,7 @@
                       }else{
                           value.classList.add(unlikedClass);
                       }
+
                   })
                 }
             };
@@ -34,13 +37,15 @@
             var xhttp =  new XMLHttpRequest();
             xhttp.onreadystatechange = function (){
                 if(this.readyState === 4 && this.status === 200){
-                    if(this.responseText === "1"){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
                         element.classList.remove(unlikedClass);
                         element.classList.add(likedClass,"red");
                     }else{
                         element.classList.remove(likedClass,"red");
                         element.classList.add(unlikedClass);
                     }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
                 }
             };
             xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
@@ -49,12 +54,12 @@
     </script>
     <center>
 
-        {% for feed in feeds %}
+        {% for feedObject in feedsData %}
             <div class="feed">
-                <img src="{{ feed.image.url }}" width="400px"/>
-                <p>{{ feed.status }}</p>
+                <img src="{{ feedObject.feed.image.url }}" width="400px"/>
+                <p>{{ feedObject.feed.status }}</p>
                 <div>
-                    <span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feed.id }}"></span>
+                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span></p>
                     <div class="comments">
 
                     </div>

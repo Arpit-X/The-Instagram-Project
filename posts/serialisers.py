@@ -6,3 +6,4 @@ class LikesSerialisers(serializers.ModelSerializer):
     class Meta:
         model = Likes
         fields = ['Liked_post_id']
+

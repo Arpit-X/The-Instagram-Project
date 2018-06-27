@@ -47,14 +47,16 @@ class FollowToggle(View):
         follower = self.request.user
         following = User.objects.get(id=self.kwargs.get('id'))
         following_obj = Follow.objects.filter(following=following,follower=follower)
-        response  = 0
+        response = 0
         if following_obj.count():
             following_obj.delete()
 
         else:
             Follow.objects.create(follower=follower,following=following)
             response = 1
+
         return HttpResponse(response)
+
 
 class LoginFormView(View):
 

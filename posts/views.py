@@ -18,11 +18,17 @@ class NewsFeed(ListView):
         context = super().get_context_data(**kwargs)
         follower_ids = Follow.objects.filter(follower=self.request.user).values_list('following_id')
         feeds = Posts.objects.filter(uploader_id__in=follower_ids)
+        feedData = []
+
+        for feed in feeds:
+            likes_count = Likes.objects.filter(Liked_post=feed).count()
+            feedData.append({'feed': feed, 'likesCount': likes_count})
+
         liked_posts = Likes.objects.filter(liked_by=self.request.user).values_list('Liked_post_id')
         liked_posts = [value[0] for value in liked_posts]
         context.update({
-            'feeds': feeds,
-            'liked_posts': liked_posts
+            'liked_posts': liked_posts,
+            'feedsData': feedData,
         })
         return context
 
@@ -54,5 +60,10 @@ class LikesToggle(View):
         else:
             Likes.objects.create(liked_by=user,Liked_post=post)
             response = 1
+        likes_count = Likes.objects.filter(Liked_post=post).count()
+        response = str(response)+","+str(likes_count)
 
         return HttpResponse(response)
+
+
+
