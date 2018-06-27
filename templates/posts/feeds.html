@@ -1,11 +1,64 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+    <script>
+        var likedClass = "glyphicon-heart";
+        var unlikedClass = "glyphicon-heart-empty";
+        $(document).ready(function(){
+
+            var liked_posts = [];
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                  var jason = JSON.parse(this.responseText);
+                  jason.forEach(function(item){
+                      var temp = Object.values(item);
+                      liked_posts.push(temp[0]);
+                  });
+                  var like_buttons = $('.likes').toArray();
+                  like_buttons.forEach(function (value) {
+                      var id = parseInt(value.getAttribute('post_id'));
+                      if(liked_posts.includes(id)){
+                          value.classList.add(likedClass,"red");
+                      }else{
+                          value.classList.add(unlikedClass);
+                      }
+                  })
+                }
+            };
+            xhttp.open("GET","{% url "posts:user_likes_api" %}",true);
+            xhttp.send();
+        });
+        var like_toggle = function (element) {
+            var xhttp =  new XMLHttpRequest();
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    if(this.responseText === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                }
+            };
+            xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
+            xhttp.send()
+        }
+    </script>
     <center>
+
         {% for feed in feeds %}
             <div class="feed">
                 <img src="{{ feed.image.url }}" width="400px"/>
                 <p>{{ feed.status }}</p>
+                <div>
+                    <span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feed.id }}"></span>
+                    <div class="comments">
+
+                    </div>
+                </div>
             </div>
         {% endfor %}
     </center>

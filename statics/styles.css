@@ -10,3 +10,10 @@ form{
     padding: 5em;
     border-radius: 10px;
 }
+
+.red{
+  color:red;
+}
+.glyphicon{
+  size:50px;
+}

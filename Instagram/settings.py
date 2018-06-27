@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'posts',
     'accounts',
     'phonenumber_field',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
