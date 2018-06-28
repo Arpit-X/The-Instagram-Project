@@ -15,10 +15,14 @@
   color:red;
 }
 .glyphicon{
-  size:50px;
+  size:100px;
 }
 .display_pictures{
     height: 50px;
     width: 50px;
     border-radius: 100px;
+}
+form{
+  margin-top:10%;
+  margin-left:40%;
 }

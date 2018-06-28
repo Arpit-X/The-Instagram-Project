@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
+        <a href="{% url "accounts:update_profile" userProfile.id %}">
+            <button class="btn btn-primary pull-right">Update</button>
+        </a>
         <img class="display_pictures" src="{{ userProfile.display_picture.url }}" width="100px"/>
         <strong><p> username : {{ userProfile.user.username }}</p></strong>
         <p>Status : {{ userProfile.status }}</p>

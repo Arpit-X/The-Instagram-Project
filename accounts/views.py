@@ -32,15 +32,14 @@ class UserDetailView(LoginRequiredMixin,DetailView):
 
         context = super(UserDetailView,self).get_context_data(**kwargs)
         profile = UserProfile.objects.get(pk=self.kwargs['pk'])
-        user = profile.user
-        followers = Follow.objects.filter(following=user).count()
-        following = Follow.objects.filter(follower=user).count()
-        isFollowing = Follow.objects.filter(follower=self.request.user,following=user ).count()
-        posts = Posts.objects.filter(uploader=user)
+        followers = Follow.objects.filter(following=profile.user).count()
+        following = Follow.objects.filter(follower=profile.user).count()
+        isFollowing = Follow.objects.filter(follower=self.request.user,following=profile.user ).count()
+        posts = Posts.objects.filter(uploader=profile.user)
         context.update({
             'followers': followers,
             'following': following,
-            'user': user,
+            'profile': profile,
             'isFollowing': isFollowing,
             'posts':posts
         })

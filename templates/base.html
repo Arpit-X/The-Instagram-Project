@@ -12,6 +12,24 @@
     {% endblock %}
 </head>
 <body>
+    <nav class="navbar-collapse collapsed">
+        <strong><a href="{% url 'posts:news_feed' %}" >Instagram</a></strong>
+       {% if user.is_authenticated %}
+            <ul class="nav navbar-nav">
+                <li><a href="{% url "accounts:user_list" %}">People</a></li>
+                <li><a href="{% url "posts:add_post" %}">Upload</a></li>
+                <li><a href=""></a></li>
+            </ul>
+        {% endif %}
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'accounts:view_profile' %}">Profile</a></li>
+                <li><a href="{% url 'accounts:logout' %}">Log Out</a></li>
+            {% else %}
+                <li><a href="{% url 'accounts:login_form' %}">Log In</a></li>
+            {% endif %}
+        </ul>
+    </nav>
     <div class="container">
         {% block body %}
 

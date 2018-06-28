@@ -38,7 +38,7 @@ class NewsFeed(LoginRequiredMixin, ListView):
 
 
 class EditPost(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    login_url = 'accounts/login/'
+    login_url = '/accounts/login/'
     model = Posts
     form_class = PostForm
     template_name = "posts/create_post.html"
@@ -64,7 +64,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         likes = Likes.objects.filter(Liked_post=post)
         comments = Comments.objects.filter(commented_post=post)
         hasLiked = 1 if Likes.objects.filter(Liked_post=post,liked_by=self.request.user) else 0
-        user = UserProfile.objects.get(user=self.request.user)
+        user = UserProfile.objects.get(user=post.uploader)
         context.update({
             'post':post,
             'likes': likes,

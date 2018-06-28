@@ -32,13 +32,15 @@
                             }
                         }
                     };
-                    xhttp.open("GET", "{{ user.id }}/follow", true);
+                    xhttp.open("GET", "{{ profile.user.id }}/follow", true);
                     xhttp.send();
                 }
     </script>
-    <p> username : {{ user.username }}</p>
-        <p>{{ user.first_name }}</p>
-        <p>email : {{ user.email    }}</p>
+        <img class="display_pictures" src="{{ profile.display_picture.url }}" width="100px"/>
+        <strong><p> username : {{ profile.user.username }}</p></strong>
+        <p>{{ profile.status }}</p>
+        <p>{{ profile.user.first_name }}</p>
+        <p>email : {{ profile.user.email    }}</p>
         <p>followers : {{ followers }}</p>
         <p>following : {{ following }}</p>
         <p>Posts : {{ posts.count }}</p>
@@ -47,9 +49,11 @@
         </div>
         <div class="container-fluid">
             {% for post in posts %}
-                <div style="display: inline-block;padding: 10px;">
-                    <img src="{{ post.image.url }}" width="300px">
-                </div>
+                <a href="{% url 'posts:post_details' post.id %}">
+                    <div style="display: inline-block;padding: 10px;">
+                        <img src="{{ post.image.url }}" width="300px">
+                    </div>
+                </a>
             {% endfor %}
         </div>
 

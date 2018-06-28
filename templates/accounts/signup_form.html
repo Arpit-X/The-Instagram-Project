@@ -40,7 +40,9 @@
             {% if errors %}
                 <p>{{ errors }}</p>
             {% endif %}
-            <button type="submit" class="btn btn-success">Log In</button>
+            <a href="{% url 'accounts:login_form' %}"><button class="btn btn-link">Log in</button></a>
+            <button type="submit" class="btn btn-success">Sign up</button>
+
         </form>
     </div>
 

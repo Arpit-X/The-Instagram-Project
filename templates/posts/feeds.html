@@ -56,9 +56,6 @@
 
         {% for feedObject in feedsData %}
             <div class="feed">
-                <div>
-                    <a href="{% url 'posts:edit_post' feedObject.feed.id %}"><button class="btn btn-primary">Edit</button></a>
-                </div>
                 <img src="{{ feedObject.feed.image.url }}" width="400px"/>
                 <p>{{ feedObject.feed.status }}</p>
                 <div>

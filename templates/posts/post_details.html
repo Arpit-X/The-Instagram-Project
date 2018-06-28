@@ -60,6 +60,9 @@
     </script>
 
     <div>
+        <nav>
+            <a href="{% url 'posts:edit_post' post.id %}"><button class="btn btn-primary pull-right">Edit</button></a>
+        </nav>
         <div class="user_details">
             <img class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
             <p>{{ profile.user.username }}</p>
