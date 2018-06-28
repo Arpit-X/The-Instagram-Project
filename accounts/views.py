@@ -1,10 +1,14 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
+
 from .forms import *
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
@@ -12,7 +16,8 @@ from posts.models import *
 # Create your views here.
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin,ListView):
+    login_url = "accounts/login/"
     model = UserProfile
     context_object_name = 'data'
     template_name = 'accounts/users_list.html'
@@ -20,7 +25,8 @@ class UserListView(ListView):
         return UserProfile.objects.filter(~Q(user=self.request.user))
 
 
-class UserDetailView(DetailView):
+class UserDetailView(LoginRequiredMixin,DetailView):
+    login_url = "/accounts/login/"
     model = UserProfile
     def get_context_data(self, **kwargs):
 
@@ -109,7 +115,7 @@ class SignUpFormView(View):
             if user is not None:
 
                 login(request,user)
-                return redirect('accounts:login_form')
+                return redirect('accounts:update_profile', pk=user.id)
             else:
                 return redirect('accounts:SignUpform')
         else:
@@ -122,14 +128,14 @@ class SignUpFormView(View):
                 }
             )
 
-
+@login_required(login_url='/accounts/login/')
 def view_profile(request):
-    user = request.user
-    followers = Follow.objects.filter(following=user).count()
-    following = Follow.objects.filter(follower=user).count()
-    posts = Posts.objects.filter(uploader=user)
+    user = UserProfile.objects.get(user=request.user)
+    followers = Follow.objects.filter(following=request.user).count()
+    following = Follow.objects.filter(follower=request.user).count()
+    posts = Posts.objects.filter(uploader=request.user)
     args = {
-        'user': user,
+        'userProfile': user,
         'followers': followers,
         'following': following,
         'posts': posts
@@ -141,3 +147,18 @@ class LogOut(View):
     def get(self, request):
         logout(request)
         return redirect('accounts:login_form')
+
+
+class UserProfileUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+
+    login_url = '/accounts/login/'
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = 'accounts/add_user_profile.html'
+    success_url = reverse_lazy('accounts:view_profile')
+
+    def has_permission(self):
+        user_id = self.kwargs['pk']
+        user_details = UserProfile.objects.get(id=user_id)
+        return user_details.user == self.request.user
+

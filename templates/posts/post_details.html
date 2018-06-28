@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <script>
+        var hasLiked = "{{ hasLiked }}";
+        var likedClass = "glyphicon-heart";
+        var unlikedClass = "glyphicon-heart-empty";
+
+
+    $(document).ready(function(){
+        var element = $('.likes')[0];
+        if(hasLiked === "1"){
+            element.classList.remove(unlikedClass);
+            element.classList.add(likedClass,"red");
+        }else{
+            //element.classList.remove(likedClass,"red");
+            element.classList.add(unlikedClass);
+        }
+    });
+    var like_toggle = function (element) {
+            var xhttp =  new XMLHttpRequest();
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
+            xhttp.send()
+        };
+        var addComment =function () {
+            var comment =$('#comment_text')[0];
+            $.ajax({
+                type : "POST",
+                url : "{% url 'posts:post_add_comment' post.id %}",
+                data : {
+                    "comment": comment.value
+                    //"csrfmiddlewaretoken": csrf
+                },
+                success : function (data) {
+                       var response = data.split(":");
+                       console.log(response);
+                        var comment = $("<div class=\"comment\">\n<strong>"+response[0]+"</strong>\n<p>"+response[1]+"</p>\n</div>");
+                        $("#comments_container").append(comment);
+                        $("#comment_text")[0].value=""
+                },
+                failure : function (data) {
+                    console.log("failure");
+                    console.log(data);
+                }
+            })
+        }
+    </script>
+
+    <div>
+        <div class="user_details">
+            <img class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
+            <p>{{ profile.user.username }}</p>
+        </div>
+        <div class="post_details">
+            <img src="{{ post.image.url }}" width="500px"/>
+            <p>{{ post.status }}</p>
+        </div>
+        <div>
+            <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span></p>
+            <div id="comments_container">
+                {% for comment in comments %}
+                    <div class="comment">
+                    <strong>{{ comment.commented_by }}</strong>
+                    <p>{{ comment.comment }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="add_comment">
+                <input type="Text" name="comment" id="comment_text"/>
+                <button class="btn btn-primary" onclick="addComment()">Add Comment</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

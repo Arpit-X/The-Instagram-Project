@@ -56,13 +56,14 @@
 
         {% for feedObject in feedsData %}
             <div class="feed">
+                <div>
+                    <a href="{% url 'posts:edit_post' feedObject.feed.id %}"><button class="btn btn-primary">Edit</button></a>
+                </div>
                 <img src="{{ feedObject.feed.image.url }}" width="400px"/>
                 <p>{{ feedObject.feed.status }}</p>
                 <div>
                     <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span></p>
-                    <div class="comments">
-
-                    </div>
+                    <div class="comments"></div>
                 </div>
             </div>
         {% endfor %}

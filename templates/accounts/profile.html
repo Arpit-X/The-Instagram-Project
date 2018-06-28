@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-        <p> username : {{ user.username }}</p>
-        <p>{{ user.first_name }}</p>
-        <p>email : {{ user.email    }}</p>
+        <img class="display_pictures" src="{{ userProfile.display_picture.url }}" width="100px"/>
+        <strong><p> username : {{ userProfile.user.username }}</p></strong>
+        <p>Status : {{ userProfile.status }}</p>
+        <p>{{ userProfile.user.first_name }}</p>
+        <p>email : {{ userProfile.user.email    }}</p>
+        <p>userProfile id: {{ userProfile.id }}</p>
+        <p>Location : {{ userProfile.city }}</p>
+        <p>ph No: {{ userProfile.phone }}</p>
         <p>followers : {{ followers }}</p>
         <p>following : {{ following }}</p>
         <p>Posts : {{ posts.count }}</p>
         <div class="container-fluid">
             {% for post in posts %}
+                <a href="{% url 'posts:post_details' post.id %}">
                 <div style="display: inline-block;padding: 10px;">
                     <img src="{{ post.image.url }}" width="300px">
                 </div>
+                </a>
            {% endfor %}
         </div>
 

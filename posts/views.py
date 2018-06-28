@@ -1,7 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, ListView
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from .forms import *
 from accounts.models import *
 from .models import *
@@ -9,7 +12,8 @@ from .models import *
 # Create your views here.
 
 
-class NewsFeed(ListView):
+class NewsFeed(LoginRequiredMixin, ListView):
+    login_url = "/accounts/login/"
     model = Posts
     context_object_name = 'feeds'
     template_name = 'posts/feeds.html'
@@ -33,7 +37,46 @@ class NewsFeed(ListView):
         return context
 
 
-class AddPost(CreateView):
+class EditPost(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    login_url = 'accounts/login/'
+    model = Posts
+    form_class = PostForm
+    template_name = "posts/create_post.html"
+    success_url = reverse_lazy('accounts:view_profile')
+
+    def has_permission(self):
+        post_id = self.kwargs['pk']
+        post_details = Posts.objects.get(id = post_id)
+        return post_details.uploader == self.request.user
+
+
+class PostDetailView(LoginRequiredMixin, DetailView):
+    login_url = '/accounts/login'
+    model = Posts
+    template_name = "posts/post_details.html"
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Posts, **self.kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = Posts.objects.get(id=self.kwargs['pk'])
+        likes = Likes.objects.filter(Liked_post=post)
+        comments = Comments.objects.filter(commented_post=post)
+        hasLiked = 1 if Likes.objects.filter(Liked_post=post,liked_by=self.request.user) else 0
+        user = UserProfile.objects.get(user=self.request.user)
+        context.update({
+            'post':post,
+            'likes': likes,
+            'comments': comments,
+            'hasLiked': hasLiked,
+            'profile': user,
+        })
+        return context
+
+
+class AddPost(LoginRequiredMixin, CreateView):
+    login_url = 'accounts/login/'
     model = Posts
     form_class = PostForm
     template_name = "posts/create_post.html"
@@ -48,7 +91,21 @@ class AddPost(CreateView):
         else:
             return redirect("posts:add_post")
 
-class LikesToggle(View):
+
+@csrf_exempt
+def addComment(request,**kwargs):
+    if request.method == "POST":
+        post = Posts.objects.get(id=kwargs['pk'])
+        comment = Comments.objects.create(
+            commented_post=post,
+            comment=request.POST["comment"],
+            commented_by=request.user
+        )
+    response = str(request.user.username)+":"+request.POST["comment"]
+    return HttpResponse(response)
+
+
+class LikesToggle( View):
     def get(self,*args,**kwargs):
         post = Posts.objects.get(id=self.kwargs.get('post_id'))
         user = self.request.user
