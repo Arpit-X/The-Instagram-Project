@@ -6,7 +6,7 @@
             var isFollowing = "{{ isFollowing }}";
 
             var buttonDiv = $('#followButton');
-            var followingButton = $('<button class="btn btn-link" onClick="follow()">Following</button>');
+            var followingButton = $('<button class="btn btn-link " onClick="follow()">Following</button>');
             var followButton = $('<button class="btn btn-primary" onClick="follow()">Follow</button>');
             if(isFollowing === "1"){
                 buttonDiv.append(followingButton)
@@ -36,18 +36,35 @@
                     xhttp.send();
                 }
     </script>
-        <img class="display_pictures" src="{{ profile.display_picture.url }}" width="100px"/>
-        <strong><p> username : {{ profile.user.username }}</p></strong>
-        <p>{{ profile.status }}</p>
-        <p>{{ profile.user.first_name }}</p>
-        <p>email : {{ profile.user.email    }}</p>
-        <p>followers : {{ followers }}</p>
-        <p>following : {{ following }}</p>
-        <p>Posts : {{ posts.count }}</p>
-        <div id="followButton">
+        <div class="user_header">
+            <img class="display_pictures" src="{{ profile.display_picture.url }}" />
+            <div class="user_data">
+                <div class="container-fluid">
+                    <strong><p>{{ profile.user.username }}</p></strong>
+                   {% if user.id == profile.user.id %}
+                        <a href="{% url "accounts:update_profile" profile.id %}">
+                            <button class="btn btn-primary">Update</button>
+                        </a>
+                   {% else %}
+                        <div id="followButton">
 
+                        </div>
+                   {% endif %}
+                </div>
+                <div class="site_details">
+                    <p><strong>{{ posts.count }}</strong> Posts </p>
+                    <p> <strong>{{ followers }}</strong> Followers </p>
+                    <p> <strong>{{ following }}</strong> Following</p>
+                </div>
+                <div>
+                    <p><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong> {{ profile.status }}</p>
+                </div>
+
+            </div>
         </div>
-        <div class="container-fluid">
+    <br>
+
+        <div class="container-fluid posts">
             {% for post in posts %}
                 <a href="{% url 'posts:post_details' post.id %}">
                     <div style="display: inline-block;padding: 10px;">

@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     status = models.TextField(max_length=100, default=" ")
     city = models.CharField(max_length=30, default="")
     phone = PhoneNumberField()
-    display_picture = models.ImageField(default="default_dp.png", blank=True, upload_to="user_display_pictures")
+    display_picture = models.ImageField(default="default_dp.png", blank=True, upload_to="user_display_pictures",)
 
     def __str__(self):
         return self.user.username

@@ -5,14 +5,29 @@
     </style>
 {% endblock %}
 {% block body %}
-
-    <div class="container">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" class="front" >
             {% csrf_token %}
-            {{ form.as_p }}
+            <table class="table">
+                <tr class="fieldwrapper">
+                    <td>{{ form.display_picture.label_tag }}</td>
+                    <td>{{ form.display_picture }}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ form.status.label_tag }}</td>
+                    <td>{{ form.status }}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ form.city.label_tag }}</td>
+                    <td>{{ form.city }}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ form.phone.label_tag }}</td>
+                    <td>{{ form.phone }}</td>
+                </tr>
+            </table>
+
             <button type="submit" class="btn btn-primary">Update</button>
 
         </form>
-    </div>
 
 {% endblock %}

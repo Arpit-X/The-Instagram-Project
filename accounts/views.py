@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from rest_framework.exceptions import PermissionDenied
 
 from .forms import *
 from django.views import View
@@ -63,7 +64,7 @@ class FollowToggle(View):
         return HttpResponse(response)
 
 
-class LoginFormView(View):
+class LoginFormView(PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = LoginForm()
@@ -89,8 +90,16 @@ class LoginFormView(View):
             else:
                 return redirect('accounts:Signup_form')
 
+    def has_permission(self):
+        return not self.request.user.is_authenticated
 
-class SignUpFormView(View):
+    def handle_no_permission(self):
+        if self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect('posts:news_feed')
+
+
+class SignUpFormView(PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         form = SignupForm()
@@ -126,6 +135,14 @@ class SignUpFormView(View):
                     'errors':form.errors
                 }
             )
+
+    def has_permission(self):
+        return not self.request.user.is_authenticated
+
+    def handle_no_permission(self):
+        if self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect('posts:news_feed')
 
 @login_required(login_url='/accounts/login/')
 def view_profile(request):

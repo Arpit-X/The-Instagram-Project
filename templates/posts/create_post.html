@@ -3,7 +3,20 @@
 {% block body %}
     <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
+            <table>
+                <tr class="fieldwrapper">
+                    <td>{{ form.image.label_tag }}</td>
+                    <td>{{ form.image }}</td>
+                </tr>
+                <tr class="fieldwrapper">
+                    <td>{{ form.status.label_tag }}</td>
+                    <td>{{ form.status }}</td>
+                </tr>
+            </table>
+
+
+
+
             <input type="submit" class="btn btn-success" vlaue="Add"/>
         </form>
 {% endblock %}

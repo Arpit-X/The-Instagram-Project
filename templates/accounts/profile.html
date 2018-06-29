@@ -1,21 +1,29 @@
 {% extends 'base.html' %}
 
 {% block body %}
-        <a href="{% url "accounts:update_profile" userProfile.id %}">
-            <button class="btn btn-primary pull-right">Update</button>
-        </a>
-        <img class="display_pictures" src="{{ userProfile.display_picture.url }}" width="100px"/>
-        <strong><p> username : {{ userProfile.user.username }}</p></strong>
-        <p>Status : {{ userProfile.status }}</p>
-        <p>{{ userProfile.user.first_name }}</p>
-        <p>email : {{ userProfile.user.email    }}</p>
-        <p>userProfile id: {{ userProfile.id }}</p>
-        <p>Location : {{ userProfile.city }}</p>
-        <p>ph No: {{ userProfile.phone }}</p>
-        <p>followers : {{ followers }}</p>
-        <p>following : {{ following }}</p>
-        <p>Posts : {{ posts.count }}</p>
-        <div class="container-fluid">
+
+
+        <div class="user_header">
+            <img class="display_pictures" src="{{ userProfile.display_picture.url }}" />
+            <div class="user_data">
+                <div class="container-fluid">
+                    <strong><p>{{ userProfile.user.username }}</p></strong>
+                    <a href="{% url "accounts:update_profile" userProfile.id %}">
+                        <button class="btn btn-primary">Update</button>
+                    </a>
+                </div>
+                <div class="site_details">
+                    <p><strong>{{ posts.count }}</strong> Posts </p>
+                    <p> <strong>{{ followers }}</strong> Followers </p>
+                    <p> <strong>{{ following }}</strong> Following</p>
+                </div>
+                <div>
+                    <p><strong>{{ userProfile.user.first_name }} {{ userProfile.user.last_name }}</strong> {{ userProfile.status }}</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid posts" >
             {% for post in posts %}
                 <a href="{% url 'posts:post_details' post.id %}">
                 <div style="display: inline-block;padding: 10px;">

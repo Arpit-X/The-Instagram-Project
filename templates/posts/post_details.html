@@ -35,56 +35,66 @@
             xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
             xhttp.send()
         };
-        var addComment =function () {
-            var comment =$('#comment_text')[0];
-            $.ajax({
-                type : "POST",
-                url : "{% url 'posts:post_add_comment' post.id %}",
-                data : {
-                    "comment": comment.value
-                    //"csrfmiddlewaretoken": csrf
-                },
-                success : function (data) {
-                       var response = data.split(":");
-                       console.log(response);
-                        var comment = $("<div class=\"comment\">\n<strong>"+response[0]+"</strong>\n<p>"+response[1]+"</p>\n</div>");
-                        $("#comments_container").append(comment);
-                        $("#comment_text")[0].value=""
-                },
-                failure : function (data) {
-                    console.log("failure");
-                    console.log(data);
-                }
-            })
-        }
+        var addComment =function (event) {
+            if(event.key === "Enter"){
+                var comment =$('#comment_text')[0];
+                $.ajax({
+                    type : "POST",
+                    url : "{% url 'posts:post_add_comment' post.id %}",
+                    data : {
+                        "comment": comment.value
+                        //"csrfmiddlewaretoken": csrf
+                    },
+                    success : function (data) {
+                           var response = data.split(":");
+                           console.log(response);
+                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+" </strong> "+response[1]+"</p>\n</div>");
+                            $("#comments_container").append(comment);
+                            $("#comment_text")[0].value=""
+                    },
+                    failure : function (data) {
+                        console.log("failure");
+                        console.log(data);
+                    }
+                })
+            }
+        };
     </script>
 
-    <div>
-        <nav>
-            <a href="{% url 'posts:edit_post' post.id %}"><button class="btn btn-primary pull-right">Edit</button></a>
-        </nav>
-        <div class="user_details">
-            <img class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
-            <p>{{ profile.user.username }}</p>
+    <div class="posted_data">
+        {% if user.id == post.uploader.id %}
+            <nav>
+                <a href="{% url 'posts:edit_post' post.id %}"><button class="btn btn-primary pull-right">Edit</button></a>
+            </nav>
+        {% endif %}
+        <div class="posted_picture">
+            <img src="{{ post.image.url }}"/>
+            <p class="status">{{ post.status }}</p>
         </div>
-        <div class="post_details">
-            <img src="{{ post.image.url }}" width="500px"/>
-            <p>{{ post.status }}</p>
-        </div>
-        <div>
-            <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span></p>
-            <div id="comments_container">
-                {% for comment in comments %}
-                    <div class="comment">
-                    <strong>{{ comment.commented_by }}</strong>
-                    <p>{{ comment.comment }}</p>
+        <div class="post_related_data" >
+            <div class="user_details">
+                <img class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
+                <p><strong>{{ profile.user.username }}</strong></p>
+            </div>
+            <br>
+            <div class="likes_comments">
+                <div id="comments_container">
+                    {% for comment in comments %}
+                        <div class="comment">
+                        <p><strong>{{ comment.commented_by }}</strong> {{ comment.comment }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="functionalities">
+                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span> likes</p>
+                    <div id="add_comment">
+                        <input type="Text" name="comment" onkeypress="addComment(event)" id="comment_text" placeholder="Add a comment..."/><br>
                     </div>
-                {% endfor %}
             </div>
-            <div id="add_comment">
-                <input type="Text" name="comment" id="comment_text"/>
-                <button class="btn btn-primary" onclick="addComment()">Add Comment</button>
-            </div>
+
         </div>
+
     </div>
 {% endblock %}

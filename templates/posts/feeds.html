@@ -50,18 +50,50 @@
             };
             xhttp.open("GET","like/"+element.getAttribute("post_id"),true);
             xhttp.send()
-        }
+        };
+        var addComment =function (event,id) {
+            if(event.key === "Enter"){
+                var comment =$('#comment_text')[0];
+                $.ajax({
+                    type : "POST",
+                    url : "/posts/"+id+"/comment",
+                    data : {
+                        "comment": comment.value
+                        //"csrfmiddlewaretoken": csrf
+                    },
+                    success : function (data) {
+                           var response = data.split(":");
+                           console.log(response);
+                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+"</strong>"+response[1]+"</p>\n</div>");
+                            $("#comments_container"+id).append(comment);
+                            $("#comment_text")[0].value=""
+                    },
+                    failure : function (data) {
+                        console.log("failure");
+                        console.log(data);
+                    }
+                })
+            }
+        };
     </script>
     <center>
 
         {% for feedObject in feedsData %}
-            <div class="feed">
-                <img src="{{ feedObject.feed.image.url }}" width="400px"/>
-                <p>{{ feedObject.feed.status }}</p>
-                <div>
-                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span></p>
-                    <div class="comments"></div>
+            <div class="feed front">
+                <div class="user_details">
+                    <img class="display_pictures" src="{{ feedObject.feed.uploader.userprofile.display_picture.url }}" alt="display picture"/>
+                    <p><a href="{% url 'accounts:user_detail' feedObject.feed.uploader.userprofile.id %}"><strong>{{ feedObject.feed.uploader.username }}</strong></a></p>
                 </div>
+                <img src="{{ feedObject.feed.image.url }}"/>
+
+                    <div>
+                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span> likes</p>
+                    <p><strong>{{ feedObject.feed.uploader.username }}</strong> {{ feedObject.feed.status }}</p>
+                    <div id="comments_container{{ feedObject.feed.id }}"></div>
+                    </div>
+                    <div id="add_commnet">
+                         <input type="Text" name="comment" onkeypress="addComment(event,{{ feedObject.feed.id }})" id="comment_text" placeholder="Add a comment..."/><br>
+                    </div>
             </div>
         {% endfor %}
     </center>

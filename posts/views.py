@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from rest_framework.exceptions import PermissionDenied
+
 from .forms import *
 from accounts.models import *
 from .models import *
@@ -21,7 +24,7 @@ class NewsFeed(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         follower_ids = Follow.objects.filter(follower=self.request.user).values_list('following_id')
-        feeds = Posts.objects.filter(uploader_id__in=follower_ids)
+        feeds = Posts.objects.filter(Q(uploader_id__in=follower_ids) | Q(uploader=self.request.user)).order_by('-date_updated')
         feedData = []
 
         for feed in feeds:
@@ -48,6 +51,11 @@ class EditPost(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         post_id = self.kwargs['pk']
         post_details = Posts.objects.get(id = post_id)
         return post_details.uploader == self.request.user
+
+    def handle_no_permission(self):
+        if self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect(self.request.META.get("HTTP_REFERER"))
 
 
 class PostDetailView(LoginRequiredMixin, DetailView):
