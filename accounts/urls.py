@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from .rest_views import *
 from django.contrib.auth.views import password_reset, password_reset_done, password_reset_confirm
 
 app_name = "accounts"
@@ -14,5 +15,6 @@ urlpatterns = [
     path('users/<int:id>/follow', FollowToggle.as_view(), name="follow_toggle"),
     path('reset-password/', password_reset, name="password_reset"),
     path('reset-password/done/', password_reset_done, name='password_reset_done'),
-    path('reset-password/confirm/', password_reset_confirm, name='password_reset_confirm')
+    path('reset-password/confirm/', password_reset_confirm, name='password_reset_confirm'),
+    path('users/api/<slug:slug>', SearchApi.as_view(), name="search_api"),
 ]

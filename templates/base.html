@@ -12,14 +12,46 @@
     <script>
         $(document).ready(function(){
             $("textarea").attr("rows",1);
-        })
+            var search_results = $("#search-results");
+            search_results.hide();
+            var search_bar = $("#search-bar");
+            search_bar.focus(function () {
+                search_results.show()
+            });
+            search_results.click(function () {
+                search_results.empty();
+                search_results.hide();
+            });
+s
+        });
+        function search_bar(slug) {
+            var search_results = $("#search-results");
+            if(slug.length>0){
+                search_results.empty();
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        var json = JSON.parse(this.responseText);
+                        json.forEach(function(item){
+                           var temp = $("<tr><td class='pic'><img class='thumbnail' src="+item['display_picture']+"/></td><td><a href='/accounts/users/"+item['id']+"'>"+item['user'].username+"</a></td></tr>");
+                           search_results.append(temp);
+                        });
+                    }
+                };
+                xhttp.open("GET" ,"/accounts/users/api/"+slug,true);
+                xhttp.send();
+            }else{
+                search_results.empty()
+            }
+        }
     </script>
     {% block head %}
 
     {% endblock %}
 </head>
 <body class="back">
- <nav class="navbar collapsed front">
+
+ <nav  id="header" class="navbar collapsed front">
         <div class="navbar-header" >
             <a href="{% url 'posts:news_feed' %}" ><img class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/></a>
         </div>
@@ -29,7 +61,10 @@
                 <li><a href="{% url "posts:add_post" %}">Upload</a></li>
 
             </ul>
-           <input type="text" id="search-bar" placeholder="Search..."/>
+           <div style="display: inline-block;" id="search_container">
+                <input type="text"  onkeyup="search_bar(this.value)"  id="search-bar" placeholder=" Search..."/>
+                <table id="search-results" ></table>
+           </div>
         {% endif %}
 
         <ul class="nav navbar-nav navbar-right">
