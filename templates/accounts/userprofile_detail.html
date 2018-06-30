@@ -24,11 +24,13 @@
                             var followingButton = $('<button class="btn btn-link" onClick="follow()">Following</button>');
                             var followButton = $('<button class="btn btn-primary" onClick="follow()">Follow</button>');
                             buttonDiv.empty();
+                            var followers = $("#followers")[0]
                             if(this.responseText === "1"){
-                                buttonDiv.append(followingButton)
-
+                                buttonDiv.append(followingButton);
+                                followers.innerText = parseInt(followers.innerText)+1;
                             }else{
                                 buttonDiv.append(followButton)
+                                followers.innerText = parseInt(followers.innerText)-1;
                             }
                         }
                     };
@@ -53,7 +55,7 @@
                 </div>
                 <div class="site_details">
                     <p><strong>{{ posts.count }}</strong> Posts </p>
-                    <p> <strong>{{ followers }}</strong> Followers </p>
+                    <p > <strong id="followers">{{ followers }}</strong> Followers </p>
                     <p> <strong>{{ following }}</strong> Following</p>
                 </div>
                 <div>
@@ -67,8 +69,8 @@
         <div class="container-fluid posts">
             {% for post in posts %}
                 <a href="{% url 'posts:post_details' post.id %}">
-                    <div style="display: inline-block;padding: 10px;">
-                        <img src="{{ post.image.url }}" width="300px">
+                    <div class="post_container" >
+                        <img src="{{ post.image.url }}">
                     </div>
                 </a>
             {% endfor %}

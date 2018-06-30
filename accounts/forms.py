@@ -34,7 +34,9 @@ class SignupForm(UserCreationForm):
             user.save()
         return user
 
+
 class UserProfileForm(forms.ModelForm):
+    display_picture = forms.ImageField(widget=forms.FileInput(attrs={'id': 'customImage'}))
     class Meta:
         model = UserProfile
         exclude = ['id', 'user']

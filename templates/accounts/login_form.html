@@ -5,13 +5,13 @@
     </style>
 {% endblock %}
 {% block body %}
-
-    <div class="container">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success">Log In</button>
-        </form>
-    </div>
-
+    <center>
+        <div class="container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Log In</button>
+            </form>
+        </div>
+    </center>
 {% endblock %}
