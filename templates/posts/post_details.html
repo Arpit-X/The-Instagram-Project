@@ -59,21 +59,42 @@
                 })
             }
         };
+        function likeDoubleClick(id) {
+            console.log("working");
+            var xhttp =  new XMLHttpRequest();
+            var element = $('#'+id)[0];
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","like/"+id,true);
+            xhttp.send()
+        }
     </script>
 
     <div class="posted_data">
         {% if user.id == post.uploader.id %}
-            <nav>
-                <a href="{% url 'posts:edit_post' post.id %}"><button class="btn btn-primary pull-right">Edit</button></a>
+            <nav >
+                <a href="{% url 'posts:delete_post' post.id %}" class="controller"><button class="btn btn-danger pull-right">Delete</button></a>
+                <a href="{% url 'posts:edit_post' post.id %}" class="controller"><button class="btn btn-primary pull-right">Edit</button></a>
             </nav>
         {% endif %}
         <div class="posted_picture">
-            <img src="{{ post.image.url }}"/>
+            <img ondblclick="likeDoubleClick({{ post.id }})" src="{{ post.image.url }}"/>
             <p class="status">{{ post.status }}</p>
         </div>
         <div class="post_related_data" >
             <div class="user_details">
-                <img class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
+                <img  class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
                 <p><strong>{{ profile.user.username }}</strong></p>
             </div>
             <br>
@@ -88,7 +109,7 @@
 
             </div>
             <div class="functionalities">
-                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span> likes</p>
+                    <p><span onclick="like_toggle(this)" id="{{ post.id }}" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span> likes</p>
                     <div id="add_comment">
                         <input type="Text" name="comment" onkeypress="addComment(event)" id="comment_text" placeholder="Add a comment..."/><br>
                     </div>

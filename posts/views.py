@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.views.generic import CreateView, ListView, UpdateView, DetailView, DeleteView
 from rest_framework.exceptions import PermissionDenied
 
 from .forms import *
@@ -46,6 +46,23 @@ class EditPost(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = PostForm
     template_name = "posts/create_post.html"
     success_url = reverse_lazy('accounts:view_profile')
+
+    def has_permission(self):
+        post_id = self.kwargs['pk']
+        post_details = Posts.objects.get(id = post_id)
+        return post_details.uploader == self.request.user
+
+    def handle_no_permission(self):
+        if self.raise_exception:
+            raise PermissionDenied(self.get_permission_denied_message())
+        return redirect(self.request.META.get("HTTP_REFERER"))
+
+
+class DeletePost(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    login_url = '/accounts/login/'
+    model = Posts
+    template_name = "posts/confirm.html"
+    success_url = reverse_lazy("accounts:view_profile")
 
     def has_permission(self):
         post_id = self.kwargs['pk']

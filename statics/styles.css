@@ -103,10 +103,6 @@ form{
   width:99%;
   border:none;
 }
-form button[type='submit']{
-  margin-left:20%;
-  width:15%
-}
 .navbar-brand{
   height:70px;
 }
@@ -141,6 +137,8 @@ nav a{
     display:inline-block;
     width: 350px;
     height:200px;
+    margin-right:5px;
+    margin-top:10px;
 }
 .post_container img {
     width: 100%;
@@ -156,4 +154,12 @@ nav a{
 }
 .user_list{
   margin-left:20%;
+}
+#search-bar{
+  margin-top:2%;
+  margin-left:2%;
+  background-color:#f1f0f0;
+  border:none;
+  padding-left:2%;
+  border-radius:2%;
 }

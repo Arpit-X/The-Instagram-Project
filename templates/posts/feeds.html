@@ -75,6 +75,25 @@
                 })
             }
         };
+        function likeDoubleClick(id) {
+            var xhttp =  new XMLHttpRequest();
+            var element = $('#'+id)[0];
+            xhttp.onreadystatechange = function (){
+                if(this.readyState === 4 && this.status === 200){
+                    var response = this.responseText.split(',');
+                    if(response[0] === "1"){
+                        element.classList.remove(unlikedClass);
+                        element.classList.add(likedClass,"red");
+                    }else{
+                        element.classList.remove(likedClass,"red");
+                        element.classList.add(unlikedClass);
+                    }
+                    element.parentElement.getElementsByClassName('likes_count')[0].innerHTML = response[1];
+                }
+            };
+            xhttp.open("GET","like/"+id,true);
+            xhttp.send()
+        }
     </script>
     <center>
 
@@ -84,10 +103,10 @@
                     <img class="display_pictures" src="{{ feedObject.feed.uploader.userprofile.display_picture.url }}" alt="display picture"/>
                     <p><a href="{% url 'accounts:user_detail' feedObject.feed.uploader.userprofile.id %}"><strong>{{ feedObject.feed.uploader.username }}</strong></a></p>
                 </div>
-                <img src="{{ feedObject.feed.image.url }}"/>
+                <img ondblclick="likeDoubleClick({{ feedObject.feed.id }})" src="{{ feedObject.feed.image.url }}"/>
 
                     <div>
-                    <p><span onclick="like_toggle(this)" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span> likes</p>
+                    <p><span onclick="like_toggle(this)" id="{{ feedObject.feed.id }}" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span> likes</p>
                     <p><strong>{{ feedObject.feed.uploader.username }}</strong> {{ feedObject.feed.status }}</p>
                     <div id="comments_container{{ feedObject.feed.id }}"></div>
                     </div>
