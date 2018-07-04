@@ -33,6 +33,7 @@ class NewsFeed(LoginRequiredMixin, ListView):
 
         liked_posts = Likes.objects.filter(liked_by=self.request.user).values_list('Liked_post_id')
         liked_posts = [value[0] for value in liked_posts]
+
         context.update({
             'liked_posts': liked_posts,
             'feedsData': feedData,

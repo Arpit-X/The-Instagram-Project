@@ -18,11 +18,10 @@
             search_bar.focus(function () {
                 search_results.show()
             });
-            search_results.click(function () {
+            $('html').click(function () {
                 search_results.empty();
                 search_results.hide();
-            });
-s
+            })
         });
         function search_bar(slug) {
             var search_results = $("#search-results");
@@ -44,6 +43,16 @@ s
                 search_results.empty()
             }
         }
+        $(window).scroll(function () {
+            var scroll = $(this).scrollTop();
+            if( scroll > 250){
+                $('#header_text').hide();
+                $('#header').animate({padding:'0% 15%'},100);
+            }else{
+                $('#header_text').show();
+                if(scroll < 10) $('#header').animate({padding:'1% 15%'},100);
+            }
+        });
     </script>
     {% block head %}
 
@@ -52,9 +61,12 @@ s
 <body class="back">
 
  <nav  id="header" class="navbar collapsed front">
-        <div class="navbar-header" >
-            <a href="{% url 'posts:news_feed' %}" ><img class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/></a>
-        </div>
+        <a href="{% url 'posts:news_feed' %}" >
+            <div class="navbar-header" >
+                <img class="navbar-brand" src="{% static 'Instagram-header-logo.png'%}"/>
+                <img id="header_text"class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/>
+            </div>
+        </a>
        {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
                 <li><a href="{% url "accounts:user_list" %}">People</a></li>

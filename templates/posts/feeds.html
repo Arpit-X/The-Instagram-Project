@@ -111,7 +111,7 @@
                     <div id="comments_container{{ feedObject.feed.id }}"></div>
                     </div>
                     <div id="add_commnet">
-                         <input type="Text" name="comment" onkeypress="addComment(event,{{ feedObject.feed.id }})" id="comment_text" placeholder="Add a comment..."/><br>
+                         <input type="Text" name="comment" autocomplete="off" onkeypress="addComment(event,{{ feedObject.feed.id }})" id="comment_text" placeholder="Add a comment..."/><br>
                     </div>
             </div>
         {% endfor %}
