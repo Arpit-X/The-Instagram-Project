@@ -55,8 +55,8 @@
                 </div>
                 <div class="site_details">
                     <p><strong>{{ posts.count }}</strong> Posts </p>
-                    <p > <strong id="followers">{{ followers }}</strong> Followers </p>
-                    <p> <strong>{{ following }}</strong> Following</p>
+                    <p > <strong id="followers">{{ followers }}</strong> <a href="{% url 'accounts:followers_list' profile.id %}"> Followers </a></p>
+                    <p> <strong>{{ following }}</strong> <a href="{% url 'accounts:followings_list' profile.id %}">Following</a></p>
                 </div>
                 <div>
                     <p><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong> {{ profile.status }}</p>

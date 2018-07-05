@@ -163,7 +163,7 @@ nav a{
 #search-results-container{
     position:absolute;
     width:250px;
-    height:400px;
+    height:200px;
 }
 #search-results{
   position:relative;
@@ -227,6 +227,9 @@ nav{
 }
 body{
   padding-top:5%
+}
+a{
+    color:black;
 }
 @media(max-width:600px){
   *{

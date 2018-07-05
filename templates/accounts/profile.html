@@ -14,8 +14,8 @@
                 </div>
                 <div class="site_details">
                     <p><strong>{{ posts.count }}</strong> Posts </p>
-                    <p> <strong>{{ followers }}</strong> Followers </p>
-                    <p> <strong>{{ following }}</strong> Following</p>
+                    <p> <strong>{{ followers }}</strong> <a href="{% url 'accounts:followers_list' userProfile.id %}"> Followers </a> </p>
+                    <p> <strong>{{ following }}</strong> <a href="{% url 'accounts:followings_list' userProfile.id %}">Following</a></p>
                 </div>
                 <div>
                     <p><strong>{{ userProfile.user.first_name }} {{ userProfile.user.last_name }}</strong> {{ userProfile.status }}</p>

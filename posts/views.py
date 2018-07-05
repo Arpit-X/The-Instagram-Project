@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse
@@ -74,6 +75,18 @@ class DeletePost(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         if self.raise_exception:
             raise PermissionDenied(self.get_permission_denied_message())
         return redirect(self.request.META.get("HTTP_REFERER"))
+
+
+@login_required(login_url='/accounts/login/')
+def LikesList(request, **kwargs):
+    post = Posts.objects.get(id=kwargs['pk'])
+    args = {
+        'data': Likes.objects.filter(Liked_post=post),
+        'title': "Likes"
+    }
+    return render(request, 'posts/likes.html', args)
+
+
 
 
 class PostDetailView(LoginRequiredMixin, DetailView):

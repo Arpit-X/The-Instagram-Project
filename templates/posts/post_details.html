@@ -109,7 +109,7 @@
 
             </div>
             <div class="functionalities">
-                    <p><span onclick="like_toggle(this)" id="{{ post.id }}" class="likes glyphicon" post_id="{{ post.id }}"></span> <span class="likes_count" >{{ likes.count }}</span> likes</p>
+                <p><span onclick="like_toggle(this)" id="{{ post.id }}" class="likes glyphicon" post_id="{{ post.id }}"></span> <a href="{% url 'posts:post_likes' post.id %}"><span class="likes_count" >{{ likes.count }}</span> likes</a></p>
                     <div id="add_comment">
                         <input type="Text" name="comment" autocomplete="off" onkeypress="addComment(event)" id="comment_text" placeholder="Add a comment..."/><br>
                     </div>

@@ -106,7 +106,7 @@
                 <img ondblclick="likeDoubleClick({{ feedObject.feed.id }})" src="{{ feedObject.feed.image.url }}"/>
 
                     <div>
-                    <p><span onclick="like_toggle(this)" id="{{ feedObject.feed.id }}" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <span class="likes_count" >{{ feedObject.likesCount }}</span> likes</p>
+                    <p><span onclick="like_toggle(this)" id="{{ feedObject.feed.id }}" class="likes glyphicon" post_id="{{ feedObject.feed.id }}"></span> <a href="{% url 'posts:post_likes' feedObject.feed.id %}"><span class="likes_count" >{{ feedObject.likesCount }}</span> likes</a></p>
                     <p><strong>{{ feedObject.feed.uploader.username }}</strong> {{ feedObject.feed.status }}</p>
                     <div id="comments_container{{ feedObject.feed.id }}"></div>
                     </div>

@@ -22,13 +22,35 @@ class UserListView(LoginRequiredMixin,ListView):
     model = UserProfile
     context_object_name = 'data'
     template_name = 'accounts/users_list.html'
+
     def get_queryset(self):
         return UserProfile.objects.filter(~Q(user=self.request.user))
+
+
+@login_required(login_url='/accounts/login/')
+def FollowersList(request, **kwargs):
+    user = User.objects.get(id=kwargs['pk'])
+    args = {
+        'data': Follow.objects.filter(following=user),
+        'title': "Followers"
+    }
+    return render(request, 'accounts/followers.html', args)
+
+
+@login_required(login_url='/accounts/login/')
+def FollowingsList(request, **kwargs):
+    user = User.objects.get(id=kwargs['pk'])
+    args = {
+        'data': Follow.objects.filter(follower=user),
+        'title': "Following"
+    }
+    return render(request, 'accounts/followings.html', args)
 
 
 class UserDetailView(LoginRequiredMixin,DetailView):
     login_url = "/accounts/login/"
     model = UserProfile
+
     def get_context_data(self, **kwargs):
 
         context = super(UserDetailView,self).get_context_data(**kwargs)
