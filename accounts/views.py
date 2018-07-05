@@ -89,6 +89,16 @@ class LoginFormView(PermissionRequiredMixin, View):
                 return redirect('posts:news_feed')
             else:
                 return redirect('accounts:Signup_form')
+        else:
+            form = LoginForm(request.POST)
+            return render(
+                request,
+                template_name='accounts/login_form.html',
+                context={
+                    'form': form,
+                    'errors': form.errors
+                }
+            )
 
     def has_permission(self):
         return not self.request.user.is_authenticated
