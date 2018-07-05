@@ -90,13 +90,13 @@
         {% endif %}
         <div class="posted_picture">
             <img ondblclick="likeDoubleClick({{ post.id }})" src="{{ post.image.url }}"/>
-            <p class="status">{{ post.status }}</p>
         </div>
         <div class="post_related_data" >
             <div class="user_details">
                 <img  class="display_pictures" src="{{ profile.display_picture.url }}" alt="display picture" width="100px"/>
-                <p><strong>{{ profile.user.username }}</strong></p>
+                <p><strong>{{ profile.user.username }}</strong></p> <p class="status">{{ post.status }}</p>
             </div>
+
             <br>
             <div class="likes_comments">
                 <div id="comments_container">

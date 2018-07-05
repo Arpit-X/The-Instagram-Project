@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
+        var hasScrolled=false;
         $(document).ready(function(){
             $("textarea").attr("rows",1);
             var search_results = $("#search-results");
@@ -49,12 +51,18 @@
             var scroll = $(this).scrollTop();
             if( scroll > 250){
                 $('#header_text').hide();
-                $('#header').animate({padding:'0% 15%'},100);
+                $('nav').addClass('shrink')
             }else{
                 $('#header_text').show();
-                if(scroll < 10) $('#header').animate({padding:'1% 15%'},100);
+                $('nav').removeClass('shrink')
+                //if(scroll < 10) $('#header').animate({padding:'1% 15%'},100);
             }
         });
+        setInterval(function () {
+            if (hasScrolled){
+
+            }
+        },250)
     </script>
     {% block head %}
 
@@ -62,24 +70,33 @@
 </head>
 <body class="back">
 
- <nav  id="header" class="navbar navbar-expand-lg front">
-        <a href="{% url 'posts:news_feed' %}" >
-            <div class="navbar-header" >
-                <img class="navbar-brand" src="{% static 'Instagram-header-logo.png'%}"/>
-                <img id="header_text"class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/>
-            </div>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+
+<nav  id="header" class="navbar navbar-default navbar-fixed-top front">
+  <div class="container-fluid">
+
+        <div class="navbar-header" >
+            <a href="{% url 'posts:news_feed' %}" >
+            <img id="header_logo"class="navbar-brand" src="{% static 'Instagram-header-logo.png'%}"/>
+            <img id="header_text"class="navbar-brand" src="{% static 'Instagram-logo-png-text.png'%}"/>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          {% if user.is_authenticated %}
             <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item"><a href="{% url "accounts:user_list" %}">People</a></li>
                 <li class="nav-item"><a href="{% url "posts:add_post" %}">Upload</a></li>
 
             </ul>
-           <div class="nav-item" style="display: inline-block;" id="search_container">
+           <div class="navbar-nav" style="display: inline-block;" id="search_container">
                 <input type="text"  onkeyup="search_bar(this.value)"  id="search-bar" placeholder=" Search..."/>
                 <table id="search-results" ></table>
            </div>
@@ -95,7 +112,8 @@
             {% endif %}
         </ul>
      </div>
-    </nav>
+   </div>
+ </nav>
     <div class="container back">
         {% block body %}
 
