@@ -186,14 +186,14 @@ td.pic{
 
   width:100%;
 }
-#comment_text{
+.comment_text{
     position:relative;
     background-color: transparent;
     padding:2%;
     border-top: 1px solid lightgrey;
     width:100%;
 }
-#comment_text:focus, #search-bar:focus{
+.comment_text:focus, #search-bar:focus{
     outline: none;
 }
 .navbar-brand{

@@ -53,7 +53,7 @@
         };
         var addComment =function (event,id) {
             if(event.key === "Enter"){
-                var comment =$('#comment_text')[0];
+                var comment =$('#comment_text'+id)[0];
                 $.ajax({
                     type : "POST",
                     url : "/posts/"+id+"/comment",
@@ -64,9 +64,9 @@
                     success : function (data) {
                            var response = data.split(":");
                            console.log(response);
-                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+"</strong>"+response[1]+"</p>\n</div>");
+                            var comment = $("<div class=\"comment\">\n<p><strong>"+response[0]+"</strong> "+response[1]+" </p>\n</div>");
                             $("#comments_container"+id).append(comment);
-                            $("#comment_text")[0].value=""
+                            $("#comment_text"+id)[0].value=""
                     },
                     failure : function (data) {
                         console.log("failure");
@@ -111,7 +111,7 @@
                     <div id="comments_container{{ feedObject.feed.id }}"></div>
                     </div>
                     <div id="add_commnet">
-                         <input type="Text" name="comment" autocomplete="" onkeypress="addComment(event,{{ feedObject.feed.id }})" id="comment_text" placeholder="Add a comment..."/><br>
+                         <input type="Text" name="comment" autocomplete="" onkeypress="addComment(event,{{ feedObject.feed.id }})" class="comment_text" id="comment_text{{ feedObject.feed.id }}" placeholder="Add a comment..."/><br>
                     </div>
             </div>
         {% endfor %}
