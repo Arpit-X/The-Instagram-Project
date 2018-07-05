@@ -37,6 +37,7 @@ class SignupForm(UserCreationForm):
 
 class UserProfileForm(forms.ModelForm):
     display_picture = forms.ImageField(widget=forms.FileInput(attrs={'id': 'customImage'}))
+    phone = forms.CharField(widget=forms.TextInput(attrs={'value':'+91'}))
     class Meta:
         model = UserProfile
         exclude = ['id', 'user']

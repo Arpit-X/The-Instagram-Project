@@ -160,13 +160,19 @@ nav a{
     width:100%;
 
 }
+#search-results-container{
+    position:absolute;
+    width:250px;
+    height:400px;
+}
 #search-results{
-  position:absolute;
+  position:relative;
   z-index:10;
   background-color:white;
-  width:250px;
+  width:100%;
   border:1px solid ;
   transition: height 2s;
+  overflow:scroll;
 }
 #search-results img{
   margin-left:15%;
@@ -174,6 +180,7 @@ nav a{
 }
 td.pic{
   width:30%;
+  padding-right:5%;
 }
 #add_comment{
 
@@ -223,7 +230,7 @@ body{
 }
 @media(max-width:600px){
   *{
-    font-size:11px
+    font-size:15px
   }
   body{
     padding-top:20%;
