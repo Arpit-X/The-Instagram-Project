@@ -30,7 +30,7 @@ Pillow==5.1.0
 prompt-toolkit==1.0.15
 psutil==5.4.6
 Pygments==2.2.0
-PyJWT==1.6.4
+PyJWT==2.4.0
 pytz==2018.4
 requests==2.19.0
 simplegeneric==0.8.1
